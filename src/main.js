@@ -26,6 +26,16 @@ form.addEventListener('submit', handleLogin);
 
 function handleLogin(event) {
   event.preventDefault();
+
+  if (btn.textContent === 'Logout') {
+    localStorage.removeItem(LS_KEY);
+    form.reset();
+    emailInput.removeAttribute('readonly');
+    passwordInput.removeAttribute('readonly');
+    btn.textContent = 'Login';
+    return;
+  }
+
   const emailValue = emailInput.value.trim();
   const passwordValue = passwordInput.value.trim();
   if (emailValue === '' || passwordValue === '') {
@@ -55,4 +65,40 @@ if (savedData) {
   btn.textContent = 'Logout';
   emailInput.setAttribute('readonly', true);
   passwordInput.setAttribute('readonly', true);
+}
+
+// ЗАДАЧА 2
+
+// Створи перелік справ.
+// Є інпут, в який вводиться назва завдання.
+// Після натискання на кнопку "Додати" завдання додається до списку #list.
+// Список із завданнями має бути доступним після перезавантаження сторінки.
+
+const formTask = document.querySelector('.task-form');
+const taskList = document.querySelector('#task-list');
+const TASKS_KEY = 'tasks';
+
+const tasksArray = [];
+
+formTask.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const inputValue = formTask.elements.taskName.value.trim();
+
+  if (!inputValue) {
+    return;
+  }
+
+  const markup = `<li>${inputValue}</li>`;
+  tasksArray.push(markup);
+  localStorage.setItem(TASKS_KEY, JSON.stringify(tasksArray));
+
+  taskList.insertAdjacentHTML('beforeend', markup);
+  formTask.reset();
+});
+
+const lsData = JSON.parse(localStorage.getItem(TASKS_KEY));
+
+if (lsData) {
+  taskList.innerHTML = lsData.join('');
 }
