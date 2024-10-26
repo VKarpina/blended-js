@@ -130,16 +130,69 @@
 // Підказка: Використайте об'єкт Date для обчислення різниці між сьогоднішньою датою і датою народження.
 
 function calculateAge(birthDate) {
-    const current = new Date()
-    const birth = new Date(birthDate);
-    
-    let yearDiff = current.getFullYear() - birth.getFullYear();
-    let monthDiff = current.getMonth() - birth.getMonth();
-    let dayDiff = current.getDay() - birth.getDay();
+	const current = new Date();
+	const birth = new Date(birthDate);
 
-    if (monthDiff < 0 ||( monthDiff==0 && dayDiff < 0)) yearDiff -= 1; 
-    return yearDiff;
+	let yearDiff = current.getFullYear() - birth.getFullYear();
+	let monthDiff = current.getMonth() - birth.getMonth();
+	let dayDiff = current.getDay() - birth.getDay();
+
+	if (monthDiff < 0 || (monthDiff == 0 && dayDiff < 0)) yearDiff -= 1;
+	return yearDiff;
 }
 
-console.log(calculateAge('2004-04-16'))
-console.log(calculateAge('2004-11-16'))
+console.log(calculateAge('2004-04-16'));
+console.log(calculateAge('2004-11-16'));
+
+// Додай відображення дати і часу в реальному часі
+
+const date = document.querySelector('.date span');
+date.textContent = new Date().toLocaleString();
+
+setInterval(() => {
+	date.textContent = new Date().toLocaleString();
+}, 1000);
+
+// Створіть функцію countdown(seconds), яка приймає кількість секунд і повертає проміс.
+// Проміс виконується після того, як пройде зазначений час. Функція має виводити у консоль кожну секунду до завершення.
+// countdown(5).then(res => console.log(res));
+// 4...
+// 3...
+// 2...
+// 1...
+// Час вийшов!
+
+function countdown(seconds) {
+	let interval = seconds - 1;
+	const id = setInterval(() => {
+		console.log(interval + '...');
+		interval -= 1;
+		if (interval === 0) {
+			clearInterval(id);
+		}
+	}, 1000);
+
+	return new Promise(resolve => {
+		setTimeout(() => {
+			resolve('Час вийшов!');
+		}, seconds * 1000);
+	});
+}
+countdown(5).then(response => console.log(response));
+
+// Зробити перемикач теми. Зберігати тему у локальному сховище.
+// При перезавантаженні сторінки перевіряти сховище та ставити тему, яка там вказана.
+// Додати класи для змін тем
+
+const checkbox = document.querySelector('.checkbox');
+checkbox.addEventListener('change', () => {
+   
+    if (checkbox.checked) {
+        document.body.classList.toggle('light', "dark");
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.toggle('dark', 'light');
+        localStorage.setItem('theme', 'light');
+    }
+});
+
