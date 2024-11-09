@@ -4,6 +4,8 @@ import Pagination from 'tui-pagination';
 import 'tui-pagination/dist/tui-pagination.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import * as basicLightbox from 'basiclightbox';
+import 'basiclightbox/dist/basicLightbox.min.css';
 
 const api = new UnsplashAPI();
 const gallery = document.querySelector('.gallery');
@@ -66,6 +68,19 @@ form.addEventListener('submit', event => {
 		});
 
 	pagination.on('afterMove', getByQuery);
+});
+
+gallery.addEventListener('click', e => {
+	e.preventDefault();
+
+	if (e.target.nodeName !== 'IMG') {
+		return;
+	}
+	const instance = basicLightbox.create(`
+        <img src="${e.target.closest('a').href}" alt="${e.target.alt}">
+    `);
+
+	instance.show();
 });
 
 function getPopular(event) {
